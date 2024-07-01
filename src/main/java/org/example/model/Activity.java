@@ -2,7 +2,7 @@ package org.example.model;
 
 public class Activity {
 
-  Long activityId;
+  long activityId;
   String name;
   String description;
 }

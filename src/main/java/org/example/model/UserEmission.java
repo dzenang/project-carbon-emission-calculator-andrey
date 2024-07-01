@@ -4,10 +4,10 @@ import java.time.LocalDate;
 
 public class UserEmission {
 
-  Long emissionId;
-  Long userId;
-  Long activityId;
-  Double quantity;
-  Double emission;
+  long emissionId;
+  long userId;
+  long activityId;
+  double quantity;
+  double emission;
   LocalDate date;
 }

@@ -4,9 +4,9 @@ import java.time.LocalDate;
 
 public class EmissionGoal {
 
-  Long goalId;
-  Long userId;
-  Double targetEmission;
+  long goalId;
+  long userId;
+  double targetEmission;
   LocalDate startDate;
   LocalDate endDate;
   String status;

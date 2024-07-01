@@ -1,5 +1,7 @@
 package org.example.dao;
 
-public interface EmissionGoalDAO {
+import org.example.model.EmissionGoal;
+
+public interface EmissionGoalDAO extends DAO<EmissionGoal> {
 
 }

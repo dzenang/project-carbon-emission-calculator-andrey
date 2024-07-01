@@ -1,5 +1,7 @@
 package org.example.dao;
 
-public interface UserEmissionDAO {
+import org.example.model.UserEmission;
+
+public interface UserEmissionDAO extends DAO<UserEmission> {
 
 }

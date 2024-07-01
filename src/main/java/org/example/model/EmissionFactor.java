@@ -2,8 +2,8 @@ package org.example.model;
 
 public class EmissionFactor {
 
-  Long factorId;
-  Long activityId;
-  Double factor;
+  long factorId;
+  long activityId;
+  double factor;
   String unit;
 }

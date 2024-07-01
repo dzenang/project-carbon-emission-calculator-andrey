@@ -1,6 +1,7 @@
 package org.example.dao;
 
-public interface ActivityDAO {
+import org.example.model.Activity;
 
+public interface ActivityDAO extends DAO<Activity> {
 
 }
