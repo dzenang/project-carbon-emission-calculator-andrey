@@ -1,6 +1,8 @@
 package org.example.model;
 
 import java.time.LocalDate;
+import org.example.enums.Status;
+import org.example.service.StatusUtil;
 
 public class EmissionGoal {
 
@@ -9,13 +11,13 @@ public class EmissionGoal {
   double targetEmission;
   LocalDate startDate;
   LocalDate endDate;
-  String status;
+  Status status;
 
-  public String getStatus() {
+  public Status getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(Status status) {
     this.status = status;
   }
 
@@ -72,7 +74,7 @@ public class EmissionGoal {
   }
 
   public EmissionGoal(long goalId, long userId, double targetEmission, LocalDate startDate,
-      LocalDate endDate, String status) {
+      LocalDate endDate, Status status) {
     this.goalId = goalId;
     this.userId = userId;
     this.targetEmission = targetEmission;

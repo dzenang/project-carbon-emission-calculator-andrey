@@ -15,9 +15,19 @@ public enum OperationQueries {
       + "FROM users u\n"
       + "JOIN user_emissions ue ON u.user_id = ue.user_id\n"
       + "JOIN emission_goals eg ON eg.user_id = u.user_id\n"
-      + "WHERE ue.date > eg.start_date AND ue.date < eg.end_date);");
-
-
+      + "WHERE ue.date > eg.start_date AND ue.date < eg.end_date);"),
+  FILTER_BASED_ON_STATUS("SELECT * FROM emission_goals WHERE status = ?::status"),
+  FILTER_TOTAL_EMISSIONS_BY_MINIMUM("SELECT a.name as \"activity\", SUM(ue.emission) as \"total emissions\"\n"
+      + "FROM user_emissions ue\n"
+      + "JOIN activities a ON ue.activity_id = a.activity_id\n"
+      + "GROUP BY a.name\n"
+      + "HAVING SUM(ue.emission) >= ?;"),
+  TOP_3_ACTIVITIES_WITH_HIGHEST_AVR_EMISSIONS("SELECT a.name as \"activity\", AVG(ue.emission) as \"average emissions\"\n"
+      + "FROM user_emissions ue\n"
+      + "JOIN activities a ON ue.activity_id = a.activity_id\n"
+      + "GROUP BY a.name\n"
+      + "ORDER BY AVG(ue.emission)\n"
+      + "LIMIT 3;");
 
   private final String query;
 

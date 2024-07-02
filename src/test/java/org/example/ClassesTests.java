@@ -17,6 +17,7 @@ import org.example.dao.UserDAO;
 import org.example.dao.UserDAOImpl;
 import org.example.dao.UserEmissionDAO;
 import org.example.dao.UserEmissionDAOImpl;
+import org.example.enums.Status;
 import org.example.model.Activity;
 import org.example.model.EmissionFactor;
 import org.example.model.EmissionGoal;
@@ -84,7 +85,7 @@ public class ClassesTests extends TestCase
     assertNotNull(connection);
 
     int randomId = new Random().nextInt();
-    EmissionGoal emissionGoal = new EmissionGoal(randomId, 1, 2., LocalDate.now(), LocalDate.now().plusDays(1), "pending");
+    EmissionGoal emissionGoal = new EmissionGoal(randomId, 1, 2., LocalDate.now(), LocalDate.now().plusDays(1), Status.EXCEED);
     EmissionGoalDAO emissionGoalDAO = new EmissionGoalDAOImpl();
 
     int totalNumberOfEntries = emissionGoalDAO.getAll().size();
@@ -119,5 +120,22 @@ public class ClassesTests extends TestCase
     assertEquals("Inserted wrong emission factor", 1, userEmissionDAO.insert(userEmission));
     assertEquals("Deleted wrong number of activity", 1, userEmissionDAO.delete(randomId));
     assertEquals("Wrong totalNumberOfEntries", totalNumberOfEntries, userEmissionDAO.getAll().size());
+  }
+
+  public void testUserEmissionBkl() throws SQLException {
+    Connection connection = ConnectionFactory.getConnection();
+    assertNotNull(connection);
+
+    for (int i = 0; i < 5; i++) {
+      int randomId = new Random().nextInt();
+      double randomDouble = Math.random();
+      UserEmission userEmission = new UserEmission(randomId, 1, 2, 2., randomDouble, LocalDate.now());
+      UserEmissionDAOImpl userEmissionDAO = new UserEmissionDAOImpl();
+
+      int totalNumberOfEntries = userEmissionDAO.getAll().size();
+      assertEquals("Inserted wrong emission factor", 1, userEmissionDAO.insert(userEmission));
+    }
+    //assertEquals("Deleted wrong number of activity", 1, userEmissionDAO.delete(randomId));
+    //assertEquals("Wrong totalNumberOfEntries", totalNumberOfEntries, userEmissionDAO.getAll().size());
   }
 }

@@ -10,8 +10,10 @@ import java.util.List;
 import org.example.config.ConnectionFactory;
 import org.example.enums.EmissionFactorCRUDQueries;
 import org.example.enums.EmissionGoalCRUDQueries;
+import org.example.enums.Status;
 import org.example.model.EmissionFactor;
 import org.example.model.EmissionGoal;
+import org.example.service.StatusUtil;
 
 public class EmissionGoalDAOImpl implements EmissionGoalDAO{
 
@@ -61,7 +63,7 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
       preparedStatement.setDouble(3, emissionGoal.getTargetEmission());
       preparedStatement.setDate(4, Date.valueOf(emissionGoal.getStartDate()));
       preparedStatement.setDate(5, Date.valueOf(emissionGoal.getEndDate()));
-      preparedStatement.setString(6, emissionGoal.getStatus());
+      preparedStatement.setString(6, StatusUtil.toString(emissionGoal.getStatus()));
       return preparedStatement.executeUpdate();
     }
   }
@@ -73,7 +75,7 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
       preparedStatement.setDouble(1, emissionGoal.getTargetEmission());
       preparedStatement.setDate(2, Date.valueOf(emissionGoal.getStartDate()));
       preparedStatement.setDate(3, Date.valueOf(emissionGoal.getEndDate()));
-      preparedStatement.setString(4, emissionGoal.getStatus());
+      preparedStatement.setString(4, StatusUtil.toString(emissionGoal.getStatus()));
       preparedStatement.setLong(5, emissionGoal.getGoalId());
       return preparedStatement.executeUpdate();
     }
@@ -95,7 +97,7 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
         resultSet.getDouble("target_emission"),
         resultSet.getDate("start_date").toLocalDate(),
         resultSet.getDate("end_date").toLocalDate(),
-        resultSet.getString("status")
+        StatusUtil.fromString(resultSet.getString("status"))
         );
   }
 }
