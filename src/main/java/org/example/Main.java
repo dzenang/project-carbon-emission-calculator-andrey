@@ -1,19 +1,14 @@
 package org.example;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 import org.example.config.ConnectionFactory;
-import org.example.dao.ActivityDAOImpl;
-import org.example.dao.DAO;
-import org.example.dao.EmissionFactorDAOImpl;
-import org.example.dao.EmissionGoalDAOImpl;
-import org.example.dao.UserDAOImpl;
-import org.example.dao.UserEmissionDAOImpl;
+import org.example.enums.OperationQueries;
 import org.example.enums.Status;
 import org.example.model.Activity;
 import org.example.model.EmissionFactor;
@@ -33,9 +28,10 @@ import org.example.service.UserService;
 public class Main
 {
     private static Scanner scanner = new Scanner(System.in);
+    private static Connection connection;
 
     public static void main( String[] args ) throws SQLException {
-       Connection connection = ConnectionFactory.getConnection();
+        connection = ConnectionFactory.getConnection();
         if ( connection != null ) {
             System.out.println("DB connection established");
         }
@@ -87,90 +83,186 @@ public class Main
 
     private static void deleteEntryFromTable(String tableName) throws SQLException {
         //todo
+        System.out.println("Sorry, this functionality is not implemented yet.");
     }
 
     private static void readEntryFromTable(String tableName) {
-        //todo
-    }
-
-    private static void updateEntryInTable(String tableName) {
-        //todo
-    }
-
-    private static void insertEntryInTable(String tableName) throws SQLException {
         switch (tableName) {
             case "activity":
-                System.out.println("Enter activity id:");
-                int id = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Name:");
-                String name = scanner.nextLine();
-                System.out.println("Description:");
-                String description = scanner.nextLine();
-                new ActivityService().insertActivity(new Activity(id, name, description));
-                System.out.println("Inserted activity successfully.");
+                System.out.println("Sorry, this functionality is not implemented yet.");
                 break;
             case "emission_factors":
-                System.out.println("Enter emission factor id:");
-                int factorId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Enter emission activity id:");
-                int activityId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Enter emission factor:");
-                double factor = scanner.nextDouble();
-                scanner.nextLine();
-                System.out.println("Enter emission unit:");
-                String unit = scanner.nextLine();
-                new EmissionFactorService().insertEmissionFactor(new EmissionFactor(factorId, activityId, factor, unit));
-                System.out.println("Inserted emission factor successfully.");
+                System.out.println("Sorry, this functionality is not implemented yet.");
                 break;
             case "emission_goals":
-                System.out.println("Enter emission goals id:");
-                int goalId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Enter user id:");
-                int userId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Enter target emission:");
-                double targetEmission = scanner.nextDouble();
-                scanner.nextLine();
-                System.out.println("Enter duration of target emission in days:");
-                long duration = scanner.nextLong();
-                scanner.nextLine();
-                new EmissionGoalsService().insertEmissionGoal(new EmissionGoal(goalId, userId, targetEmission,
-                    LocalDate.now(), LocalDate.now().plusDays(duration), Status.PENDING));
-                System.out.println("Inserted emission goal successfully.");
+                System.out.println("Sorry, this functionality is not implemented yet.");
                 break;
             case "user_emissions":
-                System.out.println("Enter emission id:");
-                int emissionId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Enter user id:");
-                int userId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Enter activity id:");
-                int activityId = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println();
-                new UserEmissionService().insertUserEmission(new UserEmission(emissionId, userId, activityId, new Random().nextDouble(), new Random().nextDouble(), LocalDate.now().minusDays(new Random().nextInt()) ));
+                System.out.println("Sorry, this functionality is not implemented yet.");
                 break;
             case "users":
-                System.out.println("Enter user id:");
-                id = scanner.nextInt();
-                scanner.nextLine();
-                System.out.println("Name:");
-                name = scanner.nextLine();
-                System.out.println("Description:");
-                String email = scanner.nextLine();
-                new UserService().createUser(new User(id, name, email));
-                System.out.println("Inserted user successfully.");
+                readUsersTable();
                 break;
             default: break;
         }
     }
 
-    private static void handleOtherSQLOperation() throws SQLException {
+    private static void readUsersTable() {
+        System.out.println("Do you want to read data for all existed users(1) or only for one(2)? Select 3 to return to previous menu");
+        int operationChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (operationChoice) {
+            case 1:
+                new UserService().getAllUsers().forEach(System.out::println);
+                break;
+            case 2:
+                System.out.println("Please enter user id:");
+                int userId = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println(new UserService().getUser(userId));
+                break;
+            case 3:
+                return;
+            default:
+                System.out.println("Invalid choice. Try again.");
+        }
+    }
+
+    private static void updateEntryInTable(String tableName) {
         //todo
+        System.out.println("Sorry, this functionality is not implemented yet.");
+    }
+
+    private static void insertEntryInTable(String tableName) throws SQLException {
+        switch (tableName) {
+            case "activity":
+                insertIntoActivityTable();
+                break;
+            case "emission_factors":
+                insertIntoEmissionFactorsTable();
+                break;
+            case "emission_goals":
+                insertIntoEmissionGoalsTable();
+                break;
+            case "user_emissions":
+                insertIntoUserEmissionsTable();
+                break;
+            case "users":
+                insertIntoUsersTable();
+                break;
+            default: break;
+        }
+    }
+
+    private static void insertIntoUsersTable() {
+        System.out.println("Enter user id:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Name:");
+        String name = scanner.nextLine();
+        System.out.println("Description:");
+        String email = scanner.nextLine();
+        new UserService().createUser(new User(id, name, email));
+        System.out.println("Inserted user successfully.");
+    }
+
+    private static void insertIntoUserEmissionsTable() {
+        System.out.println("Enter emission id:");
+        int emissionId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter user id:");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter activity id:");
+        int activityId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println();
+        new UserEmissionService().insertUserEmission(new UserEmission(emissionId, userId, activityId, new Random().nextDouble(), new Random().nextDouble(), LocalDate.now().minusDays(new Random().nextInt()) ));
+    }
+
+    private static void insertIntoEmissionGoalsTable() {
+        System.out.println("Enter emission goals id:");
+        int goalId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter user id:");
+        int userId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter target emission:");
+        double targetEmission = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.println("Enter duration of target emission in days:");
+        long duration = scanner.nextLong();
+        scanner.nextLine();
+        new EmissionGoalsService().insertEmissionGoal(new EmissionGoal(goalId, userId, targetEmission,
+            LocalDate.now(), LocalDate.now().plusDays(duration), Status.PENDING));
+        System.out.println("Inserted emission goal successfully.");
+    }
+
+    private static void insertIntoEmissionFactorsTable() {
+        System.out.println("Enter emission factor id:");
+        int factorId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter emission activity id:");
+        int activityId = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Enter emission factor:");
+        double factor = scanner.nextDouble();
+        scanner.nextLine();
+        System.out.println("Enter emission unit:");
+        String unit = scanner.nextLine();
+        new EmissionFactorService().insertEmissionFactor(new EmissionFactor(factorId, activityId, factor, unit));
+        System.out.println("Inserted emission factor successfully.");
+    }
+
+    private static void insertIntoActivityTable() {
+        System.out.println("Enter activity id:");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.println("Name:");
+        String name = scanner.nextLine();
+        System.out.println("Description:");
+        String description = scanner.nextLine();
+        new ActivityService().insertActivity(new Activity(id, name, description));
+        System.out.println("Inserted activity successfully.");
+    }
+
+    private static void handleOtherSQLOperation() throws SQLException {
+        while (true) {
+            System.out.println("Select operation for table1: 1. get monthly emission per user, 2. get total emission for user, 0. return to previous menu");
+            int operationChoice = scanner.nextInt();
+            scanner.nextLine();
+            String query;
+
+            switch (operationChoice) {
+                case 1:
+                    query = OperationQueries.MONTLY_EMISSIONS.getQuery();
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                        ResultSet resultSet = preparedStatement.executeQuery();
+                        while (resultSet.next()) {
+                            System.out.printf("Total emission for month number %s is %f\n", resultSet.getString("month"), resultSet.getDouble("emission per month"));
+                        }
+                    }
+                    break;
+                case 2:
+                    query = OperationQueries.TOTAL_EMISSIONS.getQuery();
+                    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                        System.out.println("Please enter name of the user:");
+                        String userName = scanner.nextLine();
+                        preparedStatement.setString(1, userName);
+                        ResultSet resultSet = preparedStatement.executeQuery();
+
+                        if (resultSet.next()) {
+                            System.out.println(resultSet.getString("username"));
+                            System.out.println(resultSet.getInt("sum"));
+                        }
+                    }
+                    break;
+                case 0:
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
     }
 }
