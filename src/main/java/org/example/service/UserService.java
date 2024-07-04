@@ -14,42 +14,22 @@ public class UserService {
   }
 
   public void createUser(User user) {
-    try {
-      userDAO.insert(user);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    userDAO.insert(user);
   }
 
   public void deleteUser(int id) {
-    try {
-      userDAO.delete(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    userDAO.delete(id);
   }
 
   public void updateUser(User user) {
-    try {
-      userDAO.update(user);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    userDAO.update(user);
   }
 
   public User getUser(int id) {
-    try {
-      return userDAO.get(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return userDAO.get(id);
   }
 
   public List<User> getAllUsers() {
-    try {
-      return userDAO.getAll();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return userDAO.getAll();
   }
 }

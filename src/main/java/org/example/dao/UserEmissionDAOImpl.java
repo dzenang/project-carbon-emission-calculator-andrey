@@ -28,7 +28,7 @@ public class UserEmissionDAOImpl implements UserEmissionDAO {
   }
 
   @Override
-  public UserEmission get(long id) throws SQLException {
+  public UserEmission get(long id) {
     String query = UserEmissionCRUDQueries.READ_BY_ID.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, id);
@@ -37,12 +37,14 @@ public class UserEmissionDAOImpl implements UserEmissionDAO {
       if (resultSet.next()) {
         return mapResultSetToUserEmission(resultSet);
       }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
     return null;
   }
 
   @Override
-  public List<UserEmission> getAll() throws SQLException {
+  public List<UserEmission> getAll() {
     String query = UserEmissionCRUDQueries.READ_ALL.getQuery();
     List<UserEmission> userEmissionList = new ArrayList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -50,12 +52,14 @@ public class UserEmissionDAOImpl implements UserEmissionDAO {
       while (resultSet.next()) {
         userEmissionList.add(mapResultSetToUserEmission(resultSet));
       }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
     return userEmissionList;
   }
 
   @Override
-  public int insert(UserEmission userEmission) throws SQLException {
+  public int insert(UserEmission userEmission) {
     String query = UserEmissionCRUDQueries.CREATE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, userEmission.getEmissionId());
@@ -65,11 +69,14 @@ public class UserEmissionDAOImpl implements UserEmissionDAO {
       preparedStatement.setDouble(5, userEmission.getEmission());
       preparedStatement.setDate(6, Date.valueOf(userEmission.getDate()));
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
   @Override
-  public int update(UserEmission userEmission) throws SQLException {
+  public int update(UserEmission userEmission) {
     String query = UserEmissionCRUDQueries.UPDATE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setDouble(1, userEmission.getQuantity());
@@ -77,26 +84,37 @@ public class UserEmissionDAOImpl implements UserEmissionDAO {
       preparedStatement.setDate(3, Date.valueOf(userEmission.getDate()));
       preparedStatement.setLong(4, userEmission.getEmissionId());
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
   @Override
-  public int delete(long id) throws SQLException {
+  public int delete(long id) {
     String query = UserEmissionCRUDQueries.DELETE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, id);
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
-  private UserEmission mapResultSetToUserEmission(ResultSet resultSet) throws SQLException {
-    return new UserEmission(
-        resultSet.getLong("emission_id"),
-        resultSet.getLong("user_id"),
-        resultSet.getLong("activity_id"),
-        resultSet.getDouble("quantity"),
-        resultSet.getDouble("emission"),
-        resultSet.getDate("date").toLocalDate()
-    );
+  private UserEmission mapResultSetToUserEmission(ResultSet resultSet) {
+    try {
+      return new UserEmission(
+          resultSet.getLong("emission_id"),
+          resultSet.getLong("user_id"),
+          resultSet.getLong("activity_id"),
+          resultSet.getDouble("quantity"),
+          resultSet.getDouble("emission"),
+          resultSet.getDate("date").toLocalDate()
+      );
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
+    }
+    return null;
   }
 }

@@ -23,7 +23,7 @@ public class ActivityDAOImpl implements ActivityDAO {
   }
 
   @Override
-  public Activity get(long id) throws SQLException {
+  public Activity get(long id) {
     String query = ActivityCRUDQueries.READ_BY_ID.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, id);
@@ -32,12 +32,14 @@ public class ActivityDAOImpl implements ActivityDAO {
       if (resultSet.next()) {
         return mapResultSetToActivity(resultSet);
       }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
     return null;
   }
 
   @Override
-  public List<Activity> getAll() throws SQLException {
+  public List<Activity> getAll() {
     String query = ActivityCRUDQueries.READ_ALL.getQuery();
     List<Activity> activityList = new ArrayList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -45,45 +47,61 @@ public class ActivityDAOImpl implements ActivityDAO {
       while (resultSet.next()) {
         activityList.add(mapResultSetToActivity(resultSet));
       }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
     return activityList;
   }
 
   @Override
-  public int insert(Activity activity) throws SQLException {
+  public int insert(Activity activity)  {
     String query = ActivityCRUDQueries.CREATE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, activity.getActivityId());
       preparedStatement.setString(2, activity.getName());
       preparedStatement.setString(3, activity.getDescription());
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
   @Override
-  public int update(Activity activity) throws SQLException {
+  public int update(Activity activity) {
     String query = ActivityCRUDQueries.UPDATE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, activity.getName());
       preparedStatement.setString(2, activity.getDescription());
       preparedStatement.setLong(3, activity.getActivityId());
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
   @Override
-  public int delete(long id) throws SQLException {
+  public int delete(long id)  {
     String query = ActivityCRUDQueries.DELETE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, id);
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
-  private Activity mapResultSetToActivity(ResultSet resultSet) throws SQLException {
-    return new Activity(
-        resultSet.getLong("activity_id"),
-        resultSet.getString("name"),
-        resultSet.getString("description"));
+  private Activity mapResultSetToActivity(ResultSet resultSet) {
+    try {
+      return new Activity(
+          resultSet.getLong("activity_id"),
+          resultSet.getString("name"),
+          resultSet.getString("description"));
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
+    }
+    return null;
   }
 }

@@ -28,21 +28,22 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
   }
 
   @Override
-  public EmissionGoal get(long id) throws SQLException {
+  public EmissionGoal get(long id) {
     String query = EmissionGoalCRUDQueries.READ_BY_ID.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, id);
       ResultSet resultSet = preparedStatement.executeQuery();
-
       if (resultSet.next()) {
         return mapResultSetToEmissionGoal(resultSet);
       }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
     return null;
   }
 
   @Override
-  public List<EmissionGoal> getAll() throws SQLException {
+  public List<EmissionGoal> getAll() {
     String query = EmissionGoalCRUDQueries.READ_ALL.getQuery();
     List<EmissionGoal> emissionGoalList = new ArrayList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -50,12 +51,14 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
       while (resultSet.next()) {
         emissionGoalList.add(mapResultSetToEmissionGoal(resultSet));
       }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
     return emissionGoalList;
   }
 
   @Override
-  public int insert(EmissionGoal emissionGoal) throws SQLException {
+  public int insert(EmissionGoal emissionGoal) {
     String query = EmissionGoalCRUDQueries.CREATE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, emissionGoal.getGoalId());
@@ -65,11 +68,14 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
       preparedStatement.setDate(5, Date.valueOf(emissionGoal.getEndDate()));
       preparedStatement.setString(6, StatusUtil.toString(emissionGoal.getStatus()));
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
   @Override
-  public int update(EmissionGoal emissionGoal) throws SQLException {
+  public int update(EmissionGoal emissionGoal) {
     String query = EmissionGoalCRUDQueries.UPDATE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setDouble(1, emissionGoal.getTargetEmission());
@@ -78,26 +84,37 @@ public class EmissionGoalDAOImpl implements EmissionGoalDAO{
       preparedStatement.setString(4, StatusUtil.toString(emissionGoal.getStatus()));
       preparedStatement.setLong(5, emissionGoal.getGoalId());
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
   @Override
-  public int delete(long id) throws SQLException {
+  public int delete(long id) {
     String query = EmissionGoalCRUDQueries.DELETE.getQuery();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setLong(1, id);
       return preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
     }
+    return 0;
   }
 
-  private EmissionGoal mapResultSetToEmissionGoal(ResultSet resultSet) throws SQLException {
-    return new EmissionGoal(
-        resultSet.getLong("goal_id"),
-        resultSet.getLong("user_id"),
-        resultSet.getDouble("target_emission"),
-        resultSet.getDate("start_date").toLocalDate(),
-        resultSet.getDate("end_date").toLocalDate(),
-        StatusUtil.fromString(resultSet.getString("status"))
-        );
+  private EmissionGoal mapResultSetToEmissionGoal(ResultSet resultSet) {
+    try {
+      return new EmissionGoal(
+          resultSet.getLong("goal_id"),
+          resultSet.getLong("user_id"),
+          resultSet.getDouble("target_emission"),
+          resultSet.getDate("start_date").toLocalDate(),
+          resultSet.getDate("end_date").toLocalDate(),
+          StatusUtil.fromString(resultSet.getString("status"))
+          );
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
+    }
+    return null;
   }
 }
