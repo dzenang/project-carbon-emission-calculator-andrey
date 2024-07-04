@@ -16,42 +16,22 @@ public class EmissionFactorService {
   }
 
   public void insertEmissionFactor(EmissionFactor emissionFactor) {
-    try {
-      emissionFactorDAO.insert(emissionFactor);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    emissionFactorDAO.insert(emissionFactor);
   }
 
   public void deleteEmissionFactor(int id) {
-    try {
-      emissionFactorDAO.delete(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    emissionFactorDAO.delete(id);
   }
 
   public void updateEmissionFactor(EmissionFactor emissionFactor) {
-    try {
-      emissionFactorDAO.update(emissionFactor);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    emissionFactorDAO.update(emissionFactor);
   }
 
   public EmissionFactor getEmissionFactor(int id) {
-    try {
-      return emissionFactorDAO.get(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return emissionFactorDAO.get(id);
   }
 
   public List<EmissionFactor> getEmissionFactor() {
-    try {
-      return emissionFactorDAO.getAll();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return emissionFactorDAO.getAll();
   }
 }

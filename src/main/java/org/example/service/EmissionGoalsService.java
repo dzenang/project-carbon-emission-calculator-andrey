@@ -14,42 +14,22 @@ public class EmissionGoalsService {
   }
 
   public void insertEmissionGoal(EmissionGoal emissionGoal) {
-    try {
-      emissionGoalDAO.insert(emissionGoal);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    emissionGoalDAO.insert(emissionGoal);
   }
 
   public void deleteEmissionGoal(int id) {
-    try {
-      emissionGoalDAO.delete(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    emissionGoalDAO.delete(id);
   }
 
   public void updateEmissionGoal(EmissionGoal emissionGoal) {
-    try {
-      emissionGoalDAO.update(emissionGoal);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    emissionGoalDAO.update(emissionGoal);
   }
 
   public EmissionGoal getEmissionGoal(int id) {
-    try {
-      return emissionGoalDAO.get(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return emissionGoalDAO.get(id);
   }
 
   public List<EmissionGoal> getEmissionGoal() {
-    try {
-      return emissionGoalDAO.getAll();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return emissionGoalDAO.getAll();
   }
 }

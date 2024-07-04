@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.Scanner;
-import javax.sound.midi.Soundbank;
 import org.example.config.ConnectionFactory;
 import org.example.enums.OperationQueries;
 import org.example.enums.Status;
@@ -307,7 +306,9 @@ public class Main
         String name = scanner.nextLine();
         System.out.println("Description:");
         String email = scanner.nextLine();
-        new UserService().updateUser(new User(id, name, email));
+        System.out.println("Password:");
+        String password = scanner.nextLine();
+        new UserService().updateUser(new User(id, name, email), password);
         System.out.println("Updated user successfully.");
     }
 
@@ -408,7 +409,9 @@ public class Main
         String name = scanner.nextLine();
         System.out.println("Description:");
         String email = scanner.nextLine();
-        new UserService().createUser(new User(id, name, email));
+        System.out.println("Enter user password");
+        String password = scanner.nextLine();
+        new UserService().createUser(new User(id, name, email), password);
         System.out.println("Inserted user successfully.");
     }
 
@@ -474,7 +477,7 @@ public class Main
 
     private static void handleOtherSQLOperation() throws SQLException {
         while (true) {
-            System.out.println("Select operation for table1: 1. get monthly emission per user, 2. get total emission for user, 0. return to previous menu");
+            System.out.println("Select operation for table1: 1. get monthly emission per user, 2. get total emission for user, 3. check user password by user name, 4 check user password by user ID 0. return to previous menu");
             int operationChoice = scanner.nextInt();
             scanner.nextLine();
             String query;
@@ -502,6 +505,21 @@ public class Main
                             System.out.println(resultSet.getInt("sum"));
                         }
                     }
+                    break;
+                case 3:
+                    System.out.println("Enter user name:");
+                    String name = scanner.nextLine();
+                    System.out.println("Enter password to check:");
+                    String password = scanner.nextLine();
+                    System.out.println(Boolean.TRUE.equals(new UserService().checkUserPasswordByName(name, password)) ? "Password is valid" : "Incorrect password");
+                    break;
+                case 4:
+                    System.out.println("Enter user id:");
+                    long id = scanner.nextLong();
+                    scanner.nextLine();
+                    System.out.println("Enter password to check:");
+                    password = scanner.nextLine();
+                    System.out.println(new UserService().checkUserPasswordById(id, password) ? "Password is valid" : "Incorrect password");
                     break;
                 case 0:
                     return;

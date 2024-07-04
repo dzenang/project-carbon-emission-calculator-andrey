@@ -41,16 +41,16 @@ public class UserDAOImpl implements UserDAO {
   @Override
   public List<User> getAll() {
     String query = UserCRUDQueries.READ_ALL.getQuery();
-    List<User> emissionGoalList = new ArrayList<>();
+    List<User> users = new ArrayList<>();
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       ResultSet resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {
-        emissionGoalList.add(mapResultSetToUser(resultSet));
+        users.add(mapResultSetToUser(resultSet));
       }
     } catch (SQLException e) {
       System.out.println("SQLException: " + e.getMessage());
     }
-    return emissionGoalList;
+    return users;
   }
 
   @Override
@@ -60,7 +60,8 @@ public class UserDAOImpl implements UserDAO {
       preparedStatement.setLong(1, user.getUserId());
       preparedStatement.setString(2, user.getUserName());
       preparedStatement.setString(3, user.getEmail());
-      preparedStatement.setString(4, user.getPassword());
+      preparedStatement.setString(4, user.getHash());
+      preparedStatement.setString(5, user.getSalt());
       return preparedStatement.executeUpdate();
     } catch (SQLException e) {
       System.out.println("SQLException: " + e.getMessage());
@@ -74,8 +75,9 @@ public class UserDAOImpl implements UserDAO {
     try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
       preparedStatement.setString(1, user.getUserName());
       preparedStatement.setString(2, user.getEmail());
-      preparedStatement.setString(3, user.getPassword());
-      preparedStatement.setLong(4, user.getUserId());
+      preparedStatement.setString(3, user.getHash());
+      preparedStatement.setString(4, user.getSalt());
+      preparedStatement.setLong(5, user.getUserId());
       return preparedStatement.executeUpdate();
     } catch (SQLException e) {
       System.out.println("SQLException: " + e.getMessage());
@@ -100,11 +102,34 @@ public class UserDAOImpl implements UserDAO {
       return new User(
           resultSet.getLong("user_id"),
           resultSet.getString("username"),
-          resultSet.getString("email")
+          resultSet.getString("email"),
+          resultSet.getString("password_hash"),
+          resultSet.getString("salt")
       );
     } catch (SQLException e) {
       System.out.println("SQLException: " + e.getMessage());
     }
     return null;
+  }
+
+  public List<User> getUserByUsername(String username) {
+    String query = UserCRUDQueries.READ_BY_NAME.getQuery();
+    List<User> users = new ArrayList<>();
+    try (PreparedStatement statement = connection.prepareStatement(query)) {
+      statement.setString(1, username);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        long id = resultSet.getLong("user_id");
+        String userName = resultSet.getString("username");
+        String email = resultSet.getString("email");
+        String salt = resultSet.getString("salt");
+        String hash = resultSet.getString("password_hash");
+        users.add(new User(id, userName, email, salt, hash));
+      }
+    } catch (SQLException e) {
+      System.out.println("SQLException: " + e.getMessage());
+    }
+    return users;
   }
 }

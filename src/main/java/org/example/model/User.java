@@ -5,16 +5,24 @@ public class User {
   long userId;
   String userName;
   String email;
+  String hash;
+  String salt;
 
-  public String getPassword() {
-    return password;
+  public String getSalt() {
+    return salt;
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  public void setSalt(String salt) {
+    this.salt = salt;
   }
 
-  String password;
+  public String getHash() {
+    return hash;
+  }
+
+  public void setHash(String hash) {
+    this.hash = hash;
+  }
 
   public long getUserId() {
     return userId;
@@ -53,5 +61,13 @@ public class User {
     this.userId = userId;
     this.userName = userName;
     this.email = email;
+  }
+
+  public User(long userId, String userName, String email, String hash, String salt) {
+    this.userId = userId;
+    this.userName = userName;
+    this.email = email;
+    this.hash = hash;
+    this.salt = salt;
   }
 }

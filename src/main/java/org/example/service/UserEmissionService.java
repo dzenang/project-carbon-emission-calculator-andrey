@@ -16,42 +16,22 @@ public class UserEmissionService {
   }
 
   public void insertUserEmission(UserEmission userEmission) {
-    try {
-      userEmissionDAO.insert(userEmission);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    userEmissionDAO.insert(userEmission);
   }
 
   public void deleteUserEmission(int id) {
-    try {
-      userEmissionDAO.delete(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    userEmissionDAO.delete(id);
   }
 
   public void updateUserEmission(UserEmission userEmission) {
-    try {
-      userEmissionDAO.update(userEmission);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    userEmissionDAO.update(userEmission);
   }
 
   public UserEmission getUserEmission(int id) {
-    try {
-      return userEmissionDAO.get(id);
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return userEmissionDAO.get(id);
   }
 
   public List<UserEmission> getUserEmission() {
-    try {
-      return userEmissionDAO.getAll();
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
-    }
+    return userEmissionDAO.getAll();
   }
 }
