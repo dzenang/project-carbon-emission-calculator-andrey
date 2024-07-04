@@ -1,7 +1,3 @@
-# project_carbon-emission-calculator
-
-# Description of implemented application
-
 # Application: Carbon Emission Calculator 
 
 This Java application provides a command-line interface for managing various database operations, including user creation, password hashing, and CRUD (Create, Read, Update, Delete) operations on multiple tables. The application is built with a modular structure, separating concerns into different classes and interfaces for better maintainability and scalability.
