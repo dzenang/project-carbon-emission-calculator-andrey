@@ -1,5 +1,94 @@
 # project_carbon-emission-calculator
 
+# Description of implemented application
+
+# Application: Carbon Emission Calculator 
+
+This Java application provides a command-line interface for managing various database operations, including user creation, password hashing, and CRUD (Create, Read, Update, Delete) operations on multiple tables. The application is built with a modular structure, separating concerns into different classes and interfaces for better maintainability and scalability.
+
+## Features
+
+- User Management: Create users with hashed passwords and validate user passwords.
+- CRUD Operations: Perform insert, update, read, and delete operations on different database tables.
+- Custom SQL Operations: Execute predefined SQL operations for data analysis.
+
+## Getting Started
+
+### Prerequisites
+
+- Java Development Kit (JDK) 8 or higher
+- Maven
+- MySQL Database (or any other database supported by JDBC)
+
+### Setting Up
+
+1. **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/yourusername/your-repo.git
+    cd your-repo
+    ```
+
+2. **Configure the Database:**
+
+   Update the database configuration in `UserDAOImpl.java`:
+
+    ```java
+    private static final String URL = "jdbc:mysql://localhost:3306/yourdb";
+    private static final String USER = "yourusername";
+    private static final String PASSWORD = "yourpassword";
+    ```
+
+3. **Build the Project:**
+
+    ```bash
+    mvn clean install
+    ```
+
+4. **Run the Application:**
+
+    ```bash
+    java -cp target/your-artifact-id.jar com.example.Main
+    ```
+
+## Usage
+
+Upon running the application, you will be presented with a command-line menu to navigate through different functionalities.
+
+### Main Menu
+
+- `1`: Manage `activity` table
+- `2`: Manage `emission_factors` table
+- `3`: Manage `emission_goals` table
+- `4`: Manage `user_emissions` table
+- `5`: Manage `users` table
+- `6`: Perform other SQL operations
+- `0`: Exit the application
+
+### Table Operations Menu
+
+For each table, you can perform the following operations:
+
+- `1`: Insert a new entry
+- `2`: Update an existing entry
+- `3`: Read entries
+- `4`: Delete an entry
+- `5`: Return to the previous menu
+
+### User Management
+
+- **Create User:**
+
+  Create a new user with a username and password. The password is hashed and stored securely in the database.
+
+- **Validate Password:**
+
+  Check if the provided password for a user is correct.
+
+
+------------------------------------------
+
+
 # Assignment: Carbon Emission Calculator
 
 ## Overview
